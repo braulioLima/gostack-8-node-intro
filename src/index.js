@@ -6,6 +6,15 @@ server.use(express.json());
 
 const projects = [];
 
+let amountRequests = 0;
+
+
+function countRequests(req, res, next) {
+  ++amountRequests;
+  next();
+  console.log(`Counting requests: ${amountRequests}`);
+}
+
 
 function projectExists(req, res, next) {
   const { id } = req.params;
@@ -20,6 +29,8 @@ function projectExists(req, res, next) {
   return next();
 
 };
+
+server.use(countRequests);
 
 server.post('/projects', (req, res) => {
   const { id, title } = req.body;
